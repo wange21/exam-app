@@ -1,0 +1,25 @@
+{
+  "name": "exam-app",
+  "description": "an exam web application",
+  "main": "",
+  "authors": [
+    "Herobs <herobs@herobs.cn>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "algorithm",
+    "exam"
+  ],
+  "homepage": "exam.coder.tips",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "jquery": "^3.0.0"
+  }
+}
