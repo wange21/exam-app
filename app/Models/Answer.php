@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Exam extends Model
+class Answer extends Model
 {
     /**
      * Indicates if the table should be timestamped(create_at and update_at).
