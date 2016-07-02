@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Laravel</title>
-        <link rel="stylesheet" href="{{ elixir('assets/css/bundle.css') }}">
-    </head>
-    <body>
-        <h1>Wellcome<i class="glyphicon glyphicon-plus"></i></h1>
-        <script src="{{ elixir('assets/js/bundle.js') }}"></script>
-    </body>
-</html>
+@extends('layouts.master')
+
+@section('title', '首页')
+
+@section('content')
+    @include('layouts.navbar')
+    <div class="container">
+        <h1>Wellcome</h1>
+    </div>
+@endsection
