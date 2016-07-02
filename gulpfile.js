@@ -1,5 +1,8 @@
 var elixir = require('laravel-elixir');
 
+// generate source maps
+//elixir.config.sourcemaps = false;
+
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -12,5 +15,12 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-    mix.sass('app.scss');
+  // compile and combine all sass file to single one
+  mix.sass('main.sass', 'public/assets/css/bundle.css');
+  // copy bootstrap fonts to public directory
+  mix.copy('bower_components/bootstrap/dist/fonts', 'public/build/assets/fonts');
+  // combine all javascript to single one
+  mix.scripts('', 'public/assets/js/bundle.js');
+  // attach version
+  mix.version(['assets/css/bundle.css', 'assets/js/bundle.js']);
 });
