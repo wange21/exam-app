@@ -11,6 +11,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        // teachers
+        DB::table('teachers')->insert([
+            ['id' => 1000, 'name' => '超级管理员']
+        ]);
+        // exams
         $this->call(ExamsSeeder::class);
     }
 }

@@ -18,11 +18,12 @@ elixir(function(mix) {
   // compile and combine all sass file to single one
   mix.sass('main.sass', 'public/assets/css/bundle.css');
   // copy bootstrap fonts to public directory
-  mix.copy('bower_components/bootstrap/dist/fonts', 'public/build/assets/fonts');
+  mix.copy('bower_components/bootstrap-sass/assets/fonts/bootstrap',
+    'public/build/assets/fonts/bootstrap');
   // combine all javascript to single one
   mix.scripts([
     '../../../bower_components/jquery/dist/jquery.js',
-    '../../../bower_components/bootstrap/dist/js/bootstrap.js',
+    '../../../bower_components/bootstrap-sass/assets/javascripts/bootstrap.js',
     '' // all files in assets/js
   ], 'public/assets/js/bundle.js');
   // attach version

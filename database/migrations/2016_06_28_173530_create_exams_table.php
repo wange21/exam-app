@@ -22,7 +22,7 @@ class CreateExamsTable extends Migration
             $table->dateTime('start')->index();
             // time of exam duration is seconds
             $table->mediumInteger('duration')->unsigned();
-            // the exam onwer
+            // the exam holder
             $table->integer('holder')->unsigned();
             // the type of the exam(login strategy)
             $table->tinyInteger('type')->unsigned();

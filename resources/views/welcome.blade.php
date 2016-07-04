@@ -1,10 +1,10 @@
-@extends('layouts.master')
+@extends('layout.master')
 
 @section('title', '首页')
 
 @section('content')
-    @include('layouts.navbar')
+    @include('layout.navbar', ['active' => ''])
     <div class="container">
-        <h1>Wellcome</h1>
+        <h1>Wellcome</h1><span class="glyphicon glyphicon-plus"></span>
     </div>
 @endsection

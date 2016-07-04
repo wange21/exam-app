@@ -11,6 +11,13 @@
 |
 */
 
-Route::get('/', function () {
+// index
+Route::get('/', function() {
     return view('welcome');
 });
+// exam list
+Route::get('/exams/{type?}', 'ExamController@showList')
+    ->where('type', 'all|pending|running|ended');
+// exam detail
+Route::get('/exams/{exam?}', 'ExamController@showDetail')
+    ->where('id', '\d+');

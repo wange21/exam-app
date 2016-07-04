@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Exam extends Model
+class Teacher extends Model
 {
     /**
      * Indicates if the table should be timestamped(create_at and update_at).
@@ -12,5 +12,4 @@ class Exam extends Model
      * @var bool
      */
     public $timestamps = false;
-    protected $dates = ['start'];
 }
