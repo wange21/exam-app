@@ -26,7 +26,7 @@ $factory->define(App\Models\Exam::class, function(Faker\Generator $faker) {
         'start' => $faker->dateTimeBetween('-3 days', '+3 days'),
         'duration' => $faker->numberBetween(3600, 36000),
         'holder' => 1000,
-        'type' => 1,
+        'type' => $faker->numberBetween(0, 2),
         'hidden' => 0
     ];
 });

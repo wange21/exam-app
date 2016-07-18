@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // register ExamAuthenticate middleware as singleton
+        $this->app->singleton('App\Http\Middleware\ExamAuthenticate');
     }
 }

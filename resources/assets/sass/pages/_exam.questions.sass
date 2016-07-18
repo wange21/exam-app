@@ -1,0 +1,47 @@
++new(exam-questions)
+  +has(question)
+    margin-bottom: 20px
+
+  +has(content)
+    font-size: 1.4em
+    &::before
+      content: attr(data-order)
+      color: rgba(#fff, .8)
+
+  +has(answers)
+    margin-top: 10px
+
+  +has(answer)
+    margin: 0
+
+    label
+      font-size: 18px
+    input
+      height: 18px
+      width: 18px
+
+  +when(true-false)
+    +has(answer, exam-questions)
+      label
+        line-height: 1
+      input
+        margin: 0 0 0 -24px
+
+  +when(multi-choice)
+    +has(answer, exam-questions)
+      padding: 5px 0
+
+    +has(option, exam-questions)
+      margin-left: 8px
+      &::before
+        content: attr(data-order)
+        font-weight: bold
+        color: rgba(#fff, .8)
+
+  +when(blank-fill)
+    +has(content, exam-questions)
+      input
+        display: inline
+        width: 196px
+        height: 28px
+        padding: 3px 6px

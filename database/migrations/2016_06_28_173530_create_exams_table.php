@@ -25,7 +25,13 @@ class CreateExamsTable extends Migration
             // the exam holder
             $table->integer('holder')->unsigned();
             // the type of the exam(login strategy)
-            $table->tinyInteger('type')->unsigned();
+            // 0 for student id limited(default)
+            // 1 for import account limited
+            // 2 for password limited
+            // more info at app/config/constants.php
+            $table->tinyInteger('type')->unsigned()->default(0);
+            // exam public password
+            $table->string('password', 16)->nullable();
             // hidden the exam
             $table->boolean('hidden');
         });

@@ -15,8 +15,8 @@ class CreateAnswersTable extends Migration
         Schema::create('answers', function (Blueprint $table) {
             // answer id
             $table->increments('id');
-            // problem id
-            $table->integer('problem')->unsigned();
+            // question id
+            $table->integer('question')->unsigned();
             // submit time
             $table->dateTime('submit_at');
             // score of this answer

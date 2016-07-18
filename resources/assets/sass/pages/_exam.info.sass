@@ -1,0 +1,15 @@
++new(exam-info)
+  +has(block)
+    h3
+      border-bottom: 1px solid $gray-light
+
+  +has(questions)
+    position: relative
+
+  +has(question)
+    float: left
+    padding: 8px 16px
+    border: 1px solid $gray-light
+
+.exam-info__question + .exam-info__question
+  border-left: none

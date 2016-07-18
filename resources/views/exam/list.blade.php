@@ -1,4 +1,4 @@
-@extends('layout.master')
+@extends('layout.app')
 
 @section('title', trans('exam.list.title'))
 
@@ -6,14 +6,26 @@
 @include('layout.navbar', ['active' => 'exams'])
 <div class="container">
     <div class="row">
-        <div class="col-sm-6">
-            <a class="btn {{ $type === 'all' ? 'btn-primary' : 'btn-default' }}" href="/exams">@lang('exam.list.all')</a>
-            <a class="btn {{ $type === 'running' ? 'btn-primary' : 'btn-default' }}" href="/exams/running">@lang('exam.list.running')</a>
-            <a class="btn {{ $type === 'pending' ? 'btn-primary' : 'btn-default' }}" href="/exams/pending">@lang('exam.list.pending')</a>
-            <a class="btn {{ $type === 'ended' ? 'btn-primary' : 'btn-default' }}" href="/exams/ended">@lang('exam.list.ended')</a>
+        <div class="col-sm-8 btn-toolbar">
+            <div class="btn-group">
+                <a class="btn {{ $type === 'all' ? 'btn-primary' : 'btn-default' }}" href="/exams">@lang('exam.list.all')@if ($type === 'all')({{$exams->total()}})@endif</a>
+                <a class="btn {{ $type === 'running' ? 'btn-primary' : 'btn-default' }}" href="/exams/running">@lang('exam.list.running')@if ($type === 'running')({{$exams->total()}})@endif</a>
+                <a class="btn {{ $type === 'pending' ? 'btn-primary' : 'btn-default' }}" href="/exams/pending">@lang('exam.list.pending')@if ($type === 'pending')({{$exams->total()}})@endif</a>
+                <a class="btn {{ $type === 'ended' ? 'btn-primary' : 'btn-default' }}" href="/exams/ended">@lang('exam.list.ended')@if ($type === 'ended')({{$exams->total()}})@endif</a>
+            </div>
+            <!-- not implement now
+            <div class="btn-group">
+                <button class="btn btn-primary" type="button" class="exam-list-toggle-view" id="exam-list-toggle-list">
+                    <i class="glyphicon glyphicon-th"></i>
+                </button>
+                <button class="btn btn-default" type="button" class="exam-list-toggle-view" id="exam-list-toggle-block">
+                    <i class="glyphicon glyphicon-list"></i>
+                </button>
+            </div>
+            -->
         </div>
         <div class="vehicle-divider visible-xs"></div>
-        <div class="col-sm-6 text-right">
+        <div class="col-sm-4 text-right">
             <form class="form-inline" action="{{ url()->current() }}" method="GET">
                 <div class="form-group">
                     <label class="sr-only" for="keywords">@lang('misc.search')</label>
@@ -31,43 +43,30 @@
     </div>
     <div class="exams list-group">
         @foreach($exams as $exam)
-            <a class="list-group-item col-xs-12 col-sm-6 exams__item" href="/exams/{{ $exam->id }}">
-                <div class="exams__header">
+            <a class="list-group-item col-xs-12 col-sm-6 col-md-4 exam-item" href="/exams/{{ $exam->id }}">
+                <div class="exam-header">
                     <span class="h3">{{ $exam->name }}</span>
                     @if ($exam->start > \Carbon\Carbon::now())
-                        <span class="label label-success">Pending</span>
+                        <span class="label label-info">Pending</span>
                     @elseif ($exam->start->addSeconds($exam->duration) < \Carbon\Carbon::now())
                         <span class="label label-warning">Ended</span>
                     @else
-                        <span class="label label-info">Runing</span>
+                        <span class="label label-success">Runing</span>
                     @endif
                 </div>
-                <div class="exams__time">
+                <div >
                     {{ trans('exam.list.start') . $exam->start }}
                 </div>
-                <div class="exams_duration">
-                    @lang('exam.list.duration')
-                    {{ intval($exam->duration / 3600) ? intval($exam->duration / 3600) . ' ' . trans('misc.hour') : '' }}
-                    {{ intval($exam->duration / 60) ? intval($exam->duration / 60) . ' ' . trans('misc.minute') : '' }}
+                <div>
+                    @lang('exam.list.duration'){{ App\Utils::secondsTo($exam->duration) }}
                 </div>
-                <div class="exams__teacher">
+                <div>
                     {{ trans('exam.list.teacher') .  $exam->teacher }}
                 </div>
             </a>
         @endforeach
     </div>
     {{ $exams->links() }}
-    <style>
-        .exams__item {
-            margin-top: 10px;
-            width: 49%;
-        }
-        .exams__item:nth-child(2n) {
-            margin-left: 2%;
-        }
-        .exams__header {
-            margin-bottom: 5px;
-        }
-    </style>
 </div>
+@include('layout.footer')
 @endsection
