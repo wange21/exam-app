@@ -24,6 +24,7 @@
             </script>
         <![endif]-->
         <link rel="stylesheet" href="{{ asset('assets/themes/' . config('config.theme') . '/bundle.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/katex.min.css') }}">
         <title>@yield('title')</title>
     </head>
     <body>

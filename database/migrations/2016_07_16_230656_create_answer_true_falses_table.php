@@ -13,7 +13,7 @@ class CreateAnswerTrueFalsesTable extends Migration
     public function up()
     {
         Schema::create('answer_true_false', function (Blueprint $table) {
-            // global answer id
+            // answer id
             $table->increments('id');
             // student id(each student in any exam have an unique id)
             $table->integer('student')->unsigned();

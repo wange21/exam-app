@@ -19,7 +19,7 @@ class ExamAuthenticate
     public $student;
     // exam status
     public $pending = false;
-    public $runing = false;
+    public $running = false;
     public $ended = false;
     // exam questions
     public $questions;
@@ -85,6 +85,12 @@ class ExamAuthenticate
         } else {
             $this->running = true;
         }
+
+        // if exam is pending, redirect all request to info page
+        if ($this->pending && $request->route()->getActionName() !== 'App\Http\Controllers\Exam\Info@show') {
+            return redirect('exams/'.$exam->id);
+        }
+
         // exam questions
         $questions = Question::selectRaw('type, count(*) as count')
             ->where('exam', $exam->id)

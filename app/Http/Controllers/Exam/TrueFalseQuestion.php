@@ -7,8 +7,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use ExamAuth;
 use App\Models\Question;
-use App\Models\AnswerTrueFalse as Answer;
 use App\Models\StandardTrueFalse as Standard;
+use App\Models\AnswerTrueFalse as Answer;
 
 /**
  * Exam true-false question
@@ -23,9 +23,7 @@ class TrueFalseQuestion extends Controller
             ->orderBy('id', 'asc')
             ->get();
 
-        $answers = Answer::where('student', $auth->student->id)
-            ->get();
-        $answers = $answers->keyBy('question');
+        $answers = Answer::where('student', $auth->student->id)->get()->keyBy('question');
 
         return view('exam.true-false', [
             'active' => 'true-false',
@@ -37,20 +35,25 @@ class TrueFalseQuestion extends Controller
     // save answer
     public function save(ExamAuth $auth, Request $request)
     {
-        $questions = Question::select('questions.score', 'standard.*')
-            ->join('standard_true_false as standard', 'questions.id', '=', 'standard.id')
+        if ($auth->ended) return back();
+        $questions = Question::select('questions.id', 'score', 'answer')
+            ->leftJoin('standard_true_false as tf', 'tf.id', '=', 'questions.id')
             ->where('exam', $auth->exam->id)
             ->where('type', config('constants.QUESTION_TRUE_FALSE'))
             ->get();
 
+        $oldAnswers = Answer::where('student', $auth->student->id)->get()->keyBy('question');
         foreach ($questions as $q) {
-            if ($answer = $request->input($q->id)) {
+            $answer = $request->input($q->id);
+            $oldAnswer = isset($oldAnswers[$q->id]) ? $oldAnswers[$q->id]->answer : null;
+            if ($answer || $oldAnswer) {
+                // skip for performence
+                if ($answer === $oldAnswer) continue;
                 $a = Answer::firstOrNew([
                     'student' => $auth->student->id,
                     'question' => $q->id,
                 ]);
                 $a->answer = $answer;
-                // score
                 if ($answer === $q->answer) {
                     $a->score = $q->score;
                 } else {

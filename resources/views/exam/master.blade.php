@@ -24,6 +24,7 @@
             </script>
         <![endif]-->
         <link rel="stylesheet" href="{{ asset('assets/themes/' . config('config.theme') . '/bundle.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/katex.min.css') }}">
         <title>@yield('title')</title>
     </head>
     <body>
@@ -38,13 +39,15 @@
                 <li{!! $active === 'info' ? ' class="active"' : '' !!}>
                     <a href="{{ url('exams/' . $auth->exam->id) }}"><i class="glyphicon glyphicon-info-sign"></i> 考试信息</a>
                 </li>
-                @include('exam.drawer', ['item' => 'true-false', 'icon' => 'ok'])
-                @include('exam.drawer', ['item' => 'multi-choice', 'icon' => 'list'])
-                @include('exam.drawer', ['item' => 'blank-fill', 'icon' => 'tasks'])
-                @include('exam.drawer', ['item' => 'short-answer', 'icon' => 'comment'])
-                @include('exam.drawer', ['item' => 'general', 'icon' => 'align-justify'])
-                @include('exam.drawer', ['item' => 'program-blank-fill', 'icon' => 'tasks'])
-                @include('exam.drawer', ['item' => 'program', 'icon' => 'console'])
+                @if (!$auth->pending)
+                    @include('exam.drawer', ['item' => 'true-false', 'icon' => 'ok'])
+                    @include('exam.drawer', ['item' => 'multi-choice', 'icon' => 'list'])
+                    @include('exam.drawer', ['item' => 'blank-fill', 'icon' => 'tasks'])
+                    @include('exam.drawer', ['item' => 'short-answer', 'icon' => 'comment'])
+                    @include('exam.drawer', ['item' => 'general', 'icon' => 'align-justify'])
+                    @include('exam.drawer', ['item' => 'program-blank-fill', 'icon' => 'tasks'])
+                    @include('exam.drawer', ['item' => 'program', 'icon' => 'console'])
+                @endif
                 <li class="exam-drawer__divider"></li>
                 <li><a href="{{ url('exams/') }}"><i class="glyphicon glyphicon-th"></i> 考试列表</a></li>
             </ul>

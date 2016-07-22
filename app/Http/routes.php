@@ -13,7 +13,7 @@
 
 // index
 Route::get('/', function() {
-    return view('index');
+    return redirect('exams/');
 });
 
 // exam list
@@ -60,8 +60,9 @@ Route::group([
     Route::get('program-blank-fill', 'ProgramBlankFillQuestion@show');
     Route::post('program-blank-fill', 'ProgramBlankFillQuestion@save');
     // exam program question
-    Route::get('program', 'ProgramQuestion@show');
-    Route::post('program', 'ProgramQuestion@save');
+    Route::get('program', 'ProgramQuestion@index');
+    Route::get('program/{program}', 'ProgramQuestion@show');
+    Route::post('program/{program}', 'ProgramQuestion@save');
 });
 
 // add auth routes(/login, /register, /password/reset ...)

@@ -17,13 +17,31 @@
     <div class="exam-info__time">
         考试时间：{{ $auth->exam->start }} - {{ $auth->exam->start->addSeconds($auth->exam->duration) }}
     </div>
-    <div class="alert alert-info mt20">
-        方框中的数字代表该题目的分数。蓝色背景表示你已经解答该题目，绿色背景表示你答对该题目，红色背景表示你答错该题目。
-    </div>
-    <div class="exam-info__block">
-        @foreach($questionTypes as $type)
-            @include('exam.info.questions', ['type' => $type])
-        @endforeach
-    </div>
+    @if ($auth->pending)
+        <div class="exam-info__countdown">
+            <h1>距离考试开始</h1>
+            <div class="countdown" data-seconds="{{ \Carbon\Carbon::now()->diffInSeconds($auth->exam->start) }}"></div>
+        </div>
+    @else
+        <div class="exam-info__samples">
+            <div class="exam-info__sample">
+                <span class="exam-info__untouched"></span> 未完成
+            </div>
+            <div class="exam-info__sample">
+                <span class="exam-info__touched"></span> 已完成
+            </div>
+            <div class="exam-info__sample">
+                <span class="exam-info__accepted"></span> 正确
+            </div>
+            <div class="exam-info__sample">
+                <span class="exam-info__wrong"></span> 错误
+            </div>
+        </div>
+        <div class="exam-info__block">
+            @foreach($questionTypes as $type)
+                @include('exam.info.questions', ['type' => $type])
+            @endforeach
+        </div>
+    @endif
 </div>
 @endsection

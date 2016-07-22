@@ -63,4 +63,28 @@ class Utils
 
         return rtrim($result);
     }
+    /**
+     * Get size(3K/2M/1G) in bytes
+     * @param $size {string}
+     * @return {number} size in bytes
+     */
+    public static function getSizeInBytes($size)
+    {
+        $size = trim($size);
+        $modifier = strtolower($size[strlen($size) - 1]);
+        $size = intval($size);
+        switch ($modifier) {
+            case 'g':
+                $size *= 1024;
+            case 'm':
+                $size *= 1024;
+            case 'k':
+                $size *= 1024;
+                break;
+            default:
+                throw new \Exception('Unknown byte modifier '.$modifier);
+        }
+
+        return $size;
+    }
 }

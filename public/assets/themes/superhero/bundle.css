@@ -5735,11 +5735,6 @@ button.close {
   .hidden-print {
     display: none !important; } }
 
-select:not([multiple]) {
-  border: 0;
-  outline: 1px solid #ccc;
-  outline-offset: -1px; }
-
 .navbar {
   box-shadow: none;
   border: none;
@@ -6176,22 +6171,72 @@ body {
 .exam-info__block h3 {
   border-bottom: 1px solid #4E5D6C; }
 
+.exam-info__countdown {
+  font-size: 2em;
+  margin-top: 2em;
+  text-align: center; }
+
 .exam-info__questions {
   position: relative; }
 
 .exam-info__question {
   float: left;
   padding: 8px 16px;
-  border: 1px solid #4E5D6C; }
+  border: 1px solid #4E5D6C;
+  color: #fff; }
+  .exam-info__question--untouched {
+    color: inherit; }
+  .exam-info__question--touched {
+    background: #5bc0de; }
+  .exam-info__question--accepted {
+    background: #5cb85c; }
+  .exam-info__question--wrong {
+    background: #d9534f; }
+
+.exam-info__samples {
+  margin-top: 20px;
+  margin-bottom: 10px; }
+
+.exam-info__sample {
+  display: inline;
+  margin-left: 10px; }
+  .exam-info__sample:first-child {
+    margin-left: 0; }
+  .exam-info__sample span {
+    padding: 2px 15px;
+    margin-right: 5px;
+    border: 1px solid #4E5D6C; }
+
+.exam-info__touched {
+  background: #5bc0de; }
+
+.exam-info__accepted {
+  background: #5cb85c; }
+
+.exam-info__wrong {
+  background: #d9534f; }
 
 .exam-info__question + .exam-info__question {
   border-left: none; }
 
+.countdownable {
+  font-size: 1.5em;
+  margin-top: 20px; }
+  .countdownable span {
+    padding: 8px;
+    border: 1px solid;
+    border-radius: 2px;
+    margin: 10px; }
+
+.exam-question-type {
+  margin-top: 0; }
+
 .exam-questions__question {
-  margin-bottom: 20px; }
+  margin-bottom: 32px; }
 
 .exam-questions__content {
-  font-size: 1.4em; }
+  font-size: 1.4em;
+  margin-bottom: 5px; }
   .exam-questions__content::before {
     content: attr(data-order);
     color: rgba(255, 255, 255, 0.8); }
@@ -6200,12 +6245,32 @@ body {
   margin-top: 10px; }
 
 .exam-questions__answer {
-  margin: 0; }
+  margin: 0 !important; }
   .exam-questions__answer label {
     font-size: 18px; }
   .exam-questions__answer input {
     height: 18px;
     width: 18px; }
+
+.exam-questions__file {
+  position: relative;
+  margin-top: 10px;
+  background: #fff; }
+  .exam-questions__file input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 0; }
+  .exam-questions__file label {
+    display: block;
+    cursor: pointer;
+    font-size: 18px;
+    margin: 0;
+    padding: 4px 8px;
+    color: #DF691A; }
+    .exam-questions__file label.disabled {
+      cursor: not-allowed; }
 
 .exam-questions--true-false .exam-questions__answer label {
   line-height: 1; }
@@ -6228,5 +6293,55 @@ body {
   width: 196px;
   height: 28px;
   padding: 3px 6px; }
+
+.exam-questions--general .exam-questions__answer {
+  margin-top: 20px; }
+  .exam-questions--general .exam-questions__answer input {
+    width: 100%;
+    height: 32px;
+    padding: 2px;
+    background: #fff; }
+
+.exam-program-nav {
+  position: relative;
+  margin-bottom: 20px; }
+  .exam-program-nav__item {
+    float: left;
+    padding: 8px 16px;
+    border: 1px solid #4E5D6C;
+    border-right: none;
+    color: #fff; }
+    .exam-program-nav__item:last-child {
+      border-right: 1px solid #4E5D6C; }
+    .exam-program-nav__item--untouched {
+      color: inherit; }
+    .exam-program-nav__item--touched {
+      background: #5bc0de; }
+    .exam-program-nav__item--accepted {
+      background: #5cb85c; }
+    .exam-program-nav__item--wrong {
+      background: #d9534f; }
+    .exam-program-nav__item.is-active {
+      color: #DF691A;
+      border-bottom: 3px solid;
+      padding-bottom: 6px; }
+
+.exam-program__title {
+  font-size: 1.4em;
+  margin-bottom: 5px; }
+
+.exam-program__answer {
+  margin-bottom: 10px; }
+  .exam-program__answer textarea {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace; }
+
+.exam-program__control label {
+  margin-left: 20px;
+  font-size: 18px;
+  vertical-align: sub; }
+
+.exam-program__control select {
+  display: inline;
+  width: 128px; }
 
 /*# sourceMappingURL=bundle.css.map */
