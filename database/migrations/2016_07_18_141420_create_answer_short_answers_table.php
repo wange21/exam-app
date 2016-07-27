@@ -14,17 +14,9 @@ class CreateAnswerShortAnswersTable extends Migration
     {
         Schema::create('answer_short_answer', function (Blueprint $table) {
             // answer id
-            $table->increments('id');
-            // student id(each student in any exam have an unique id)
-            $table->integer('student')->unsigned();
-            // question id
-            $table->integer('question')->unsigned();
+            $table->integer('id')->unsigned()->unique();
             // answer
             $table->text('answer');
-            // score
-            $table->tinyInteger('score')->unsigned()->nullable();
-            // create an index with student and question
-            $table->index(['student', 'question']);
         });
     }
 

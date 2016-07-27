@@ -19,11 +19,4 @@ class AnswerProgram extends Model
      * @var string
      */
     protected $table = 'answer_program';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['student', 'question'];
 }

@@ -22,7 +22,7 @@ class CreateStudentsTable extends Migration
             // student name
             $table->char('name', 16);
             // major
-            $table->char('major', 32);
+            $table->char('major', 32)->nullable();
             // import password
             $table->char('password', 128)->nullable();
             // date time last login

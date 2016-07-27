@@ -2,30 +2,42 @@
 
 namespace App\Http\Controllers\Exam;
 
+use \Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use ExamAuth;
 use App\Models\Question;
-use App\Models\AnswerMultiChoice as Answer;
 use App\Models\StandardMultiChoice as Standard;
+use App\Models\AnswerMultiChoice as Answer;
+use App\Models\Answer as Answers;
 
 /**
  * Exam true-false question
  */
 class MultiChoiceQuestion extends Controller
 {
+    /**
+     * Question type
+     */
+    protected $type = 'multi-choice';
+
     // show all true-false questions
     public function show(ExamAuth $auth)
     {
+        if ($auth->pending) return redirect('/exam/'.$auth->exam->id);
         // answers
-        $answers = Answer::where('student', $auth->student->id)->get()->keyBy('question');
+        $answers = Answers::select('answer_multi_choice.*', 'answers.question')
+            ->join('answer_multi_choice', 'answers.id', '=', 'answer_multi_choice.id')
+            ->where('student', $auth->student->id)
+            ->get()
+            ->keyBy('question');
         $questions = Question::join('question_multi_choice as mc', 'mc.id', '=', 'questions.ref')
             ->where('exam', $auth->exam->id)
-            ->where('type', config('constants.QUESTION_MULTI_CHOICE'))
+            ->where('type', $this->type)
             ->orderBy('questions.id', 'asc')
             ->get()
-            ->reduce(function($qs, $q) {
+            ->reduce(function($qs, $q) use($answers) {
                 if (isset($qs[$q->id])) {
                     $qs[$q->id]->options[] =  (object)[
                         'order' => $q->order,
@@ -50,7 +62,7 @@ class MultiChoiceQuestion extends Controller
             }, []);
 
         return view('exam.multi-choice', [
-            'active' => 'multi-choice',
+            'active' => $this->type,
             'auth' => $auth,
             'questions' => $questions,
         ]);
@@ -59,14 +71,19 @@ class MultiChoiceQuestion extends Controller
     // save answer
     public function save(ExamAuth $auth, Request $request)
     {
-        if ($auth->ended) return back();
-        $questions = Question::select('questions.id', 'score', 'answer')
-            ->leftJoin('standard_multi_choice as mc', 'mc.id', '=', 'questions.id')
+        if (!$auth->running) return redirect('/exam/'.$auth->exam->id);
+        $questions = Question::select('questions.id', 'questions.score', 'standard_multi_choice.answer')
+            ->leftJoin('standard_multi_choice', 'standard_multi_choice.id', '=', 'questions.id')
             ->where('exam', $auth->exam->id)
-            ->where('type', config('constants.QUESTION_MULTI_CHOICE'))
+            ->where('type', $this->type)
             ->get();
 
-        $oldAnswers = Answer::where('student', $auth->student->id)->get()->keyBy('question');
+        $oldAnswers = Answers::select('answer_multi_choice.*', 'answers.question')
+            ->join('answer_multi_choice', 'answers.id', '=', 'answer_multi_choice.id')
+            ->where('student', $auth->student->id)
+            ->get()
+            ->keyBy('question');
+
         foreach ($questions as $q) {
             $answers = $request->input($q->id);
             $oldAnswer = isset($oldAnswers[$q->id]) ? $oldAnswers[$q->id]->answer : null;
@@ -78,17 +95,30 @@ class MultiChoiceQuestion extends Controller
                 }
                 // skip for performence
                 if ($answer === $oldAnswer) continue;
-                $a = Answer::firstOrNew([
-                    'student' => $auth->student->id,
-                    'question' => $q->id,
-                ]);
-                $a->answer = $answer;
-                if ($answer === $q->answer) {
-                    $a->score = $q->score;
+                $answersObject = Answers::where('student', $auth->student->id)
+                    ->where('question', $q->id)
+                    ->first();
+                if (is_null($answersObject)) {
+                    $answersObject = new Answers;
+                    $answersObject->student = $auth->student->id;
+                    $answersObject->question = $q->id;
+                    $answersObject->type = $this->type;
+                    $answersObject->save();
+
+                    $answerObject = new Answer;
+                    $answerObject->id = $answersObject->id;
                 } else {
-                    $a->score = 0;
+                    $answerObject = Answer::find($answersObject->id);
                 }
-                $a->save();
+                $answersObject->submit = Carbon::now();
+                $answerObject->answer = $answer;
+                if ($answer === $q->answer) {
+                    $answersObject->score = $q->score;
+                } else {
+                    $answersObject->score = 0;
+                }
+                $answersObject->save();
+                $answerObject->save();
             }
         }
 

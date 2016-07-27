@@ -1,4 +1,4 @@
-@extends('exam.master')
+@extends('layout.exam')
 
 @section('title', $auth->exam->name)
 
@@ -38,8 +38,8 @@
             </div>
         </div>
         <div class="exam-info__block">
-            @foreach($questionTypes as $type)
-                @include('exam.info.questions', ['type' => $type])
+            @foreach($questions as $type => $question)
+                @include('exam.questions', ['type' => $type, 'questions' => $question])
             @endforeach
         </div>
     @endif

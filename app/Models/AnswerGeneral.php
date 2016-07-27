@@ -19,11 +19,4 @@ class AnswerGeneral extends Model
      * @var string
      */
     protected $table = 'answer_general';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['student', 'question'];
 }

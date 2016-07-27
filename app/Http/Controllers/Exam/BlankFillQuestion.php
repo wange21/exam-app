@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Exam;
 
+use \Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -9,21 +10,30 @@ use ExamAuth;
 use App\Models\Question;
 use App\Models\StandardBlankFill as Standard;
 use App\Models\AnswerBlankFill as Answer;
+use App\Models\Answer as Answers;
 
 /**
  * Exam blank-fill question
  */
 class BlankFillQuestion extends Controller
 {
+    /**
+     * Question type
+     */
+    protected $type = 'blank-fill';
+
     // show all true-false questions
     public function show(ExamAuth $auth)
     {
+        if ($auth->pending) return redirect('/exam/'.$auth->exam->id);
         $questions = Question::where('exam', $auth->exam->id)
-            ->where('type', config('constants.QUESTION_BLANK_FILL'))
+            ->where('type', $this->type)
             ->orderBy('id', 'asc')
             ->get();
 
-        $answers = Answer::where('student', $auth->student->id)
+        $answers = Answers::select('answer_blank_fill.*', 'answers.question')
+            ->join('answer_blank_fill', 'answers.id', '=', 'answer_blank_fill.id')
+            ->where('student', $auth->student->id)
             ->get()
             ->reduce(function($as, $a) {
                 $as[$a->question . '-' . $a->order] = $a->answer;
@@ -41,7 +51,7 @@ class BlankFillQuestion extends Controller
         }
 
         return view('exam.blank-fill', [
-            'active' => 'blank-fill',
+            'active' => $this->type,
             'auth' => $auth,
             'questions' => $questions,
             'answers' => $answers,
@@ -50,20 +60,22 @@ class BlankFillQuestion extends Controller
     // save answer
     public function save(ExamAuth $auth, Request $request)
     {
-        if ($auth->ended) return back();
+        if (!$auth->running) return redirect('/exam/'.$auth->exam->id);
         $questions = Question::select('id', 'score')
             ->where('exam', $auth->exam->id)
-            ->where('type', config('constants.QUESTION_BLANK_FILL'))
+            ->where('type', $this->type)
             ->get();
 
-        $standards = Standard::where('student', $auth->student->id)
+        $standards = Standard::where('exam', $auth->exam->id)
             ->get()
-            ->reduce(function($sds, $item) {
-                $sds[$item->id.'-'.$item->order] = $item;
+            ->reduce(function($sds, $sd) {
+                $sds[$sd->id.'-'.$sd->order] = $sd->answer;
                 return $sds;
             }, []);
 
-        $oldAnswers = Answer::where('student', $auth->student->id)
+        $oldAnswers =  Answers::select('answer_blank_fill.*', 'answers.question')
+            ->join('answer_blank_fill', 'answers.id', '=', 'answer_blank_fill.id')
+            ->where('student', $auth->student->id)
             ->get()
             ->reduce(function($as, $a) {
                 $as[$a->question . '-' . $a->order] = $a->answer;
@@ -72,27 +84,47 @@ class BlankFillQuestion extends Controller
 
         foreach ($questions as $q) {
             $answers = $request->input($q->id);
-            if (is_null($answers)) $answers = [];
 
+            if (is_null($answers)) $answers = [];
             $blanks = count($answers);
+
+            $answersObject = Answers::where('student', $auth->student->id)
+                ->where('question', $q->id)
+                ->first();
+            if (is_null($answersObject)) {
+                $answersObject = new Answers;
+                $answersObject->student = $auth->student->id;
+                $answersObject->question = $q->id;
+                $answersObject->type = $this->type;
+                $answersObject->save();
+            }
+            $answersObject->submit = Carbon::now();
+            $scores = 0;
+
             for ($i = 0; $i < $blanks; $i++) {
-                $oldAnswer = isset($oldAnswers[$q->id.'-'.$i]) ? $oldAnswers[$q->id.'-'.$i]->answer : null;
-                $standardAnswer = isset($standards[$q->id.'-'.$i]) ? $standards[$q->id.'-'.$i]->answer : null;
-                if ($answer = $answers[$i] || $oldAnswer) {
-                    $a = Answer::firstOrNew([
-                        'student' => $auth->student->id,
-                        'question' => $q->id,
+                $key = $q->id.'-'.$i;
+                $oldAnswer = isset($oldAnswers[$key]) ? $oldAnswers[$key] : null;
+                $standardAnswer = isset($standards[$key]) ? $standards[$key] : null;
+                $regexpAnswer = regexp($standardAnswer);
+                if (($answer = $answers[$i]) || $oldAnswer) {
+                    if ($answer === $oldAnswer) continue;
+                    $answerObject = Answer::firstOrNew([
+                        'id' => $answersObject->id,
                         'order' => $i,
                     ]);
-                    $a->answer = $answer;
-                    if ($answer === $standardAnswer) {
-                        $a->score = $q->score;
-                    } else {
-                        $a->score = 0;
+
+                    if ($regexpAnswer && preg_match($regexpAnswer, $answer)) {
+                        $scores += $q->score;
+                    } else if ($standardAnswer === $answer) {
+                        $scores += $q->score;
                     }
-                    $a->save();
+
+                    $answerObject->answer = $answer;
+                    $answerObject->save();
                 }
             }
+            $answersObject->score = $scores;
+            $answersObject->save();
         }
 
         return back();

@@ -1,4 +1,4 @@
-@extends('exam.master')
+@extends('layout.exam')
 
 @section('title', $auth->exam->name)
 

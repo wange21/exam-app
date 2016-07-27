@@ -19,11 +19,4 @@ class AnswerTrueFalse extends Model
      * @var string
      */
     protected $table = 'answer_true_false';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['student', 'question'];
 }

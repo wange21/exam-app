@@ -19,11 +19,4 @@ class AnswerShortAnswer extends Model
      * @var string
      */
     protected $table = 'answer_short_answer';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['student', 'question'];
 }

@@ -3,7 +3,7 @@
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navbar" aria-expanded="false">
-                <span class="sr-only">@lang('navbar.toggle')</span>
+                <span class="sr-only">切换导航</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -13,7 +13,7 @@
 
         <div class="collapse navbar-collapse" id="top-navbar">
             <ul class="nav navbar-nav">
-                <li{!! $active === 'exams' ? ' class="active"' : '' !!}><a href="/exams">@lang('navbar.exams')</a></li>
+                <li{!! pif($active === 'exams', ' class="active"') !!}><a href="/exams">考试列表</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
@@ -24,12 +24,12 @@
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url('/logout') }}"><i class="glyphicon glyphicon-log-out"></i> @lang('misc.logout')</a></li>
+                                <li><a href="{{ url('/logout') }}"><i class="glyphicon glyphicon-log-out"></i> 退出</a></li>
                             </ul>
                         </li>
                 @else
-                    <li{!! $active === 'login' ? ' class="active"' : '' !!}><a href="{{ url('/login') }}">@lang('misc.login')</a></li>
-                    <li{!! $active === 'register' ? ' class="active"' : '' !!}><a href="{{ url('/register') }}">@lang('misc.register')</a></li>
+                    <li{!! pif($active === 'login', ' class="active"') !!}><a href="{{ url('/login') }}">登录</a></li>
+                    <li{!! pif($active === 'register', ' class="active"') !!}><a href="{{ url('/register') }}">注册</a></li>
                 @endif
             </ul>
         </div><!-- /.navbar-collapse -->

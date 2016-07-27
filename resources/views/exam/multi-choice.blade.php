@@ -1,4 +1,4 @@
-@extends('exam.master')
+@extends('layout.exam')
 
 @section('title', $auth->exam->name)
 
@@ -11,13 +11,13 @@
             <a href="#" id="{{ $q->id }}"></a>
             <div class="exam-questions__question">
                 <div class="exam-questions__content markdown-inline" data-order="{{ $index++ }}.">
-                    {{ trans('misc.leftBracket') . $q->score . ' 分' . trans('misc.rightBracket') . $q->description }}
+                    （{{ $q->score.' 分）'.$q->description }}
                 </div>
                 <div class="exam-questions__answers clearfix">
                     @foreach($q->options as $v => $option)
                         <div class="exam-questions__answer col-sm-12 col-md-6 checkbox">
                             <label>
-                                <input type="checkbox" name="{{ $q->id }}[]" value="{{ $v }}"{{ $q->answer & 1 << $v ? ' checked="checked"' : '' }}{{ $auth->ended ? ' disabled' : '' }}>
+                                <input type="checkbox" name="{{ $q->id }}[]" value="{{ $v }}"{{ pif($q->answer & 1 << $v, ' checked="checked"').pif($auth->ended, ' disabled') }}>
                                 <div class="exam-questions__option" data-order="{{ chr(65 + $option->order) }}.">
                                     {{ $option->option }}
                                 </div>

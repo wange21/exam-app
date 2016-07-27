@@ -1,4 +1,4 @@
-@extends('exam.master')
+@extends('layout.exam')
 
 @section('title', $auth->exam->name)
 
@@ -15,10 +15,10 @@
                 </div>
                 <div class="exam-questions__answers clearfix">
                     <div class="exam-questions__answer col-xs-6 radio">
-                        <label><input type="radio" name="{{ $q->id }}" value="true"{{ $q->answer === 'true' ? ' checked="checked"' : '' }}{{ $auth->ended ? ' disabled' : '' }}> 正确</label>
+                        <label><input type="radio" name="{{ $q->id }}" value="true"{{ pif($q->answer === 'true', ' checked="checked"').pif($auth->ended, ' disabled') }}> 正确</label>
                     </div>
                     <div class="exam-questions__answer col-xs-6 radio">
-                        <label><input type="radio" name="{{ $q->id }}" value="false"{{ $q->answer === 'false' ? ' checked="checked"' : '' }}{{ $auth->ended ? ' disabled' : '' }}> 错误</label>
+                        <label><input type="radio" name="{{ $q->id }}" value="false"{{ pif($q->answer === 'false', ' checked="checked"').pif($auth->ended, ' disabled') }}> 错误</label>
                     </div>
                 </div>
             </div>

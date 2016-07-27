@@ -24,8 +24,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
-        // all exam id should be digits
+        // all exam/question id should be digits
         $router->pattern('exam', '\d+');
+        $router->pattern('question', '\d+');
+        $router->pattern('student', '\d+');
 
         parent::boot($router);
     }

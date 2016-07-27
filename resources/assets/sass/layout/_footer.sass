@@ -2,7 +2,7 @@ html
   position: relative
   min-height: 100%
 body
-  margin-bottom: 80px
+  margin-bottom: 60px
   overflow-x: hidden
 
 +new(footer)
@@ -14,3 +14,8 @@ body
   padding: 20px
   text-align: center
   background: $gray-light
+
+  +has(brand)
+    font-size: 18px
+  +when(admin)
+    padding: 5px 20px

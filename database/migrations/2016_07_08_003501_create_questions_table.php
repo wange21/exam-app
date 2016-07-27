@@ -18,16 +18,17 @@ class CreateQuestionsTable extends Migration
             // the exam this question belong to
             $table->integer('exam')->unsigned()->index();
             // question type
-            // 0 for true-false
-            // 1 for multi-choice
-            // 2 for blank-fill
-            // 3 for short-answer
-            // 4 for general-question
-            // 5 for program-blank-fill
-            // 6 for program
-            // 7 for database-blank-fill(not supported now)
-            // 8 for database(not supported now)
-            $table->tinyInteger('type')->unsigned();
+            $table->enum('type', [
+                'true-false',
+                'multi-choice',
+                'blank-fill',
+                'short-answer',
+                'general',
+                'program-blank-fill',
+                'program',
+                'database-blank-fill',
+                'database',
+            ]);
             // question description
             $table->text('description');
             // the score of the question(0 - 255)

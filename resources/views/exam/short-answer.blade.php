@@ -1,4 +1,4 @@
-@extends('exam.master')
+@extends('layout.exam')
 
 @section('title', $auth->exam->name)
 
@@ -14,7 +14,7 @@
                     （{{ $q->score . ' 分' . '）' . $q->description }}
                 </div>
                 <div class="exam-questions__answer">
-                    <textarea class="form-control" name="{{ $q->id }}" rows="8" cols="40"{{ $auth->ended ? ' disabled' : '' }}>{{ $q->answer }}</textarea>
+                    <textarea class="form-control" name="{{ $q->id }}" rows="8" cols="40"{{ pif($auth->ended, ' disabled') }}>{{ $q->answer }}</textarea>
                 </div>
             </div>
         @endforeach

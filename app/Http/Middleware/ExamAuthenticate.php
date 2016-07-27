@@ -8,7 +8,6 @@ use DB;
 use App\Models\Exam;
 use App\Models\Student;
 use App\Models\Question;
-use App\Models\Score;
 use Carbon\Carbon;
 
 class ExamAuthenticate
@@ -35,7 +34,7 @@ class ExamAuthenticate
         $exam = Exam::findOrFail($request->route('exam'));
         $student = session($exam->getSessionKey());
         // student id limited, global account login required
-        if ($exam->type === config('constants.EXAM_STUDENTID_LIMITED')) {
+        if ($exam->type === 'student') {
             if (Auth::guard('user')->guest()) {
                 return redirect()->guest('login');
             }
@@ -52,24 +51,23 @@ class ExamAuthenticate
                     $student->last = Carbon::now();
                     $student->ip = $request->ip();
                     $student->save();
-                    // scores record
-                    Score::firstOrCreate(['id' => $student->id]);
+
                     // store in session
                     session([
                         $exam->getSessionKey() => (object)$student->toArray()
                     ]);
                 } else {
-                    return redirect('exams/' . $exam->id . '/forbidden');
+                    return redirect('/exam/' . $exam->id . '/forbidden');
                 }
             }
-        } else if ($exam->type === config('constants.EXAM_IMPORT_LIMITED')) {
+        } else if ($exam->type === 'account') {
             if (is_null($student) || $student->exam !== $exam->id) {
-                return redirect()->guest('exams/' . $exam->id . '/login');
+                return redirect()->guest('/exam/' . $exam->id . '/login');
             }
-        } else if ($exam->type === config('constants.EXAM_PASSWORD_LIMITED')) {
+        } else if ($exam->type === 'password') {
             if (Auth::guard('user')->guest() || $student === null ||
                 $student->exam !== $exam->id) {
-                return redirect()->guest('exams/' . $exam->id . '/login');
+                return redirect()->guest('/exam/' . $exam->id . '/login');
             }
         }
 
@@ -86,31 +84,12 @@ class ExamAuthenticate
             $this->running = true;
         }
 
-        // if exam is pending, redirect all request to info page
-        if ($this->pending && $request->route()->getActionName() !== 'App\Http\Controllers\Exam\Info@show') {
-            return redirect('exams/'.$exam->id);
-        }
-
         // exam questions
         $questions = Question::selectRaw('type, count(*) as count')
             ->where('exam', $exam->id)
             ->groupBy('type')
-            ->get();
-        $qs = [
-            'trueFalse' => false,
-            'multiChoice' => false,
-            'blankFill' => false,
-            'shortAnswer' => false,
-            'general' => false,
-            'programBlankFill' => false,
-            'program' => false,
-        ];
-        $qsKeys = array_keys($qs);
-        $questions = $questions->reduce(function($qs, $q) use ($qsKeys) {
-            $qs[$qsKeys[$q->type]] = $q->count;
-            return $qs;
-        }, $qs);
-
+            ->get()
+            ->keyBy('type');
         $this->questions = $questions;
 
         return $next($request);

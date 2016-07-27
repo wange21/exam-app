@@ -1,4 +1,4 @@
-@extends('exam.master')
+@extends('layout.exam')
 
 @section('title', $auth->exam->name)
 
@@ -14,14 +14,14 @@
                     （{{ $q->score . ' 分' . '）' . $q->description }}
                 </div>
                 <div class="exam-questions__file">
-                    <label for="file{{ $q->id }}" {!! $auth->ended ? ' class="disabled"' : '' !!}>
+                    <label for="file{{ $q->id }}" {!! pif($auth->ended, ' class="disabled"') !!}>
                         @if ($q->answer)
                             已经提交文件：{{ $q->answer }}
                         @else
                             <i class="glyphicon glyphicon-open"></i> 选择文件
                         @endif
                     </label>
-                    <input type="file" id="file{{ $q->id }}" name="{{ $q->id }}"{{ $auth->ended ? ' disabled' : '' }}>
+                    <input type="file" id="file{{ $q->id }}" name="{{ $q->id }}"{{ pif($auth->ended, ' disabled') }}>
                 </div>
             </div>
         @endforeach

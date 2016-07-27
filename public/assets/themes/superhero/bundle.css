@@ -5966,6 +5966,14 @@ a.list-group-item-danger.active:hover, a.list-group-item-danger.active:focus {
 .popover-title {
   border: none; }
 
+table a:not(.btn), .table a:not(.btn) {
+  color: #DF691A;
+  text-decoration: none; }
+
+.alert {
+  padding: 8px;
+  font-size: 14px; }
+
 .vehicle-divider {
   height: 10px; }
 
@@ -5983,7 +5991,7 @@ html {
   min-height: 100%; }
 
 body {
-  margin-bottom: 80px;
+  margin-bottom: 60px;
   overflow-x: hidden; }
 
 .footer {
@@ -5995,6 +6003,10 @@ body {
   padding: 20px;
   text-align: center;
   background: #4E5D6C; }
+  .footer__brand {
+    font-size: 18px; }
+  .footer--admin {
+    padding: 5px 20px; }
 
 @media (max-width: 767px) {
   .pagination li {
@@ -6010,6 +6022,7 @@ body {
   position: fixed;
   left: 10px;
   top: 10px;
+  width: 36px;
   padding: 2px 6px 10px;
   border: none;
   background: none;
@@ -6049,59 +6062,88 @@ body {
       top: 0.5rem; }
     .navicon__lines:after {
       top: -0.5rem; }
-  .is-open .navicon--x {
-    left: 60%; }
-    .is-open .navicon--x .navicon__lines {
+  .navicon--x.is-open {
+    left: 60%;
+    left: calc(60% - 36px); }
+    @media (min-width: 480px) {
+      .navicon--x.is-open {
+        left: 50%;
+        left: calc(50% - 36px); } }
+    @media (min-width: 768px) {
+      .navicon--x.is-open {
+        left: 40%;
+        left: calc(40% - 36px); } }
+    .navicon--x.is-open .navicon__lines {
       transform: scale3d(1.125, 1.125, 1.125);
       background: transparent; }
-      .is-open .navicon--x .navicon__lines:before, .is-open .navicon--x .navicon__lines:after {
+      .navicon--x.is-open .navicon__lines:before, .navicon--x.is-open .navicon__lines:after {
         transform-origin: 50% 50%;
         top: 0;
         width: 2rem; }
-      .is-open .navicon--x .navicon__lines:before {
+      .navicon--x.is-open .navicon__lines:before {
         transform: rotate3d(0, 0, 1, 45deg); }
-      .is-open .navicon--x .navicon__lines:after {
+      .navicon--x.is-open .navicon__lines:after {
         transform: rotate3d(0, 0, 1, -45deg); }
 
-.exam-drawer {
+.page-drawer {
   position: fixed;
   top: 0;
   bottom: 0;
-  left: -60%;
+  left: 0;
+  width: 100%;
   z-index: 0;
-  width: 60%;
   background: rgba(0, 0, 0, 0.1);
   transition: 180ms ease-in left;
   overflow: auto; }
-  .exam-drawer__info {
-    padding: 20px 15px; }
-  .exam-drawer__logout {
+  .page-drawer__info {
+    padding: 15px;
+    border-bottom: 1px solid #4E5D6C; }
+  .page-drawer__logout {
     margin-top: 5px; }
-  .exam-drawer__divider {
+  .page-drawer__divider {
     height: 4px;
     margin: 5px 0;
     background: rgba(64, 64, 64, 0.8); }
-  .is-open .exam-drawer {
-    left: 0; }
-  .exam-drawer li.active {
+  .page-drawer li.active {
     background: #4E5D6C; }
   @media (min-width: 992px) {
-    .exam-drawer {
+    .page-drawer {
       position: absolute;
+      top: 0;
       left: 0;
       width: 20%; } }
 
-.exam-main {
+.page-wrapper {
   position: relative;
   left: 0;
   padding: 24px;
-  transition: 180ms ease-in left; }
-  .is-open .exam-main {
+  background: inherit;
+  z-index: 10;
+  transition: 200ms ease-out left; }
+  .page-wrapper__mask {
+    position: fixed;
+    top: 0;
+    bottom: 60px;
+    left: inherit;
+    width: 100%;
+    background: inherit;
+    z-index: -1;
+    background: inherit;
+    z-index: -1; }
+  .page-wrapper.is-open {
     left: 60%; }
+    @media (min-width: 480px) {
+      .page-wrapper.is-open {
+        left: 50%; } }
+    @media (min-width: 768px) {
+      .page-wrapper.is-open {
+        left: 40%; } }
   @media (min-width: 992px) {
-    .exam-main {
+    .page-wrapper {
       width: 80%;
-      margin-left: 20%; } }
+      margin-left: 20%; }
+      .page-wrapper__mask {
+        display: none; } }
 
 @media (min-width: 768px) {
   .form-box {
@@ -6343,5 +6385,16 @@ body {
 .exam-program__control select {
   display: inline;
   width: 128px; }
+
+.see-all {
+  font-size: 12px;
+  text-align: right; }
+  .see-all--under-table {
+    margin-top: -20px; }
+
+.admin-exam-password {
+  display: none; }
+  .admin-exam-password--show {
+    display: block; }
 
 /*# sourceMappingURL=bundle.css.map */

@@ -28,16 +28,16 @@
         <title>@yield('title')</title>
     </head>
     <body>
-        <div class="exam-drawer">
-            <div class="exam-drawer__info">
+        <div class="page-drawer">
+            <div class="page-drawer__info">
                 <i class="glyphicon glyphicon-user"></i> {{ $auth->student->name }}({{ $auth->student->student }})
-                <div class="exam-drawer__logout">
-                    <a href="{{ url('exams/' . $auth->exam->id . '/logout') }}">退出登录</a>
+                <div class="page-drawer__logout">
+                    <a href="{{ '/exam/'.$auth->exam->id.'/logout' }}">退出登录</a>
                 </div>
             </div>
-            <ul class="nav">
-                <li{!! $active === 'info' ? ' class="active"' : '' !!}>
-                    <a href="{{ url('exams/' . $auth->exam->id) }}"><i class="glyphicon glyphicon-info-sign"></i> 考试信息</a>
+            <ul class="page-drawer__nav nav">
+                <li{!! pif($active === 'index', ' class="active"') !!}>
+                    <a href="{{ '/exam/'.$auth->exam->id }}"><i class="glyphicon glyphicon-info-sign"></i> 考试信息</a>
                 </li>
                 @if (!$auth->pending)
                     @include('exam.drawer', ['item' => 'true-false', 'icon' => 'ok'])
@@ -45,14 +45,14 @@
                     @include('exam.drawer', ['item' => 'blank-fill', 'icon' => 'tasks'])
                     @include('exam.drawer', ['item' => 'short-answer', 'icon' => 'comment'])
                     @include('exam.drawer', ['item' => 'general', 'icon' => 'align-justify'])
-                    @include('exam.drawer', ['item' => 'program-blank-fill', 'icon' => 'tasks'])
                     @include('exam.drawer', ['item' => 'program', 'icon' => 'console'])
                 @endif
-                <li class="exam-drawer__divider"></li>
-                <li><a href="{{ url('exams/') }}"><i class="glyphicon glyphicon-th"></i> 考试列表</a></li>
+                <li class="page-drawer__divider"></li>
+                <li><a href="/exams"><i class="glyphicon glyphicon-th"></i> 考试列表</a></li>
             </ul>
         </div>
-        <div class="exam-main">
+        <div class="page-wrapper">
+            <div class="page-wrapper__mask"></div>
             <button type="button" class="navicon navicon--x" aria-expanded="false">
                 <span class="sr-only">@lang('navbar.toggle')</span>
                 <span class="navicon__lines"></span>

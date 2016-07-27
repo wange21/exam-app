@@ -12219,9 +12219,16 @@ $(function() {
   // remove 'no-js' class on html tag
   $('html').removeClass('no-js');
   // bind navicon click handler
+  var $pageWrapper = $('.page-wrapper');
   $('.navicon').click(function(e) {
     e.preventDefault();
-    $('body').toggleClass('is-open');
+    $this = $(this);
+    $this.toggleClass('is-open');
+    if ($this.hasClass('is-open')) {
+      $pageWrapper.addClass('is-open');
+    } else {
+      $pageWrapper.removeClass('is-open');
+    }
   });
   // render LaTex with  KaTex if the boswer not IE 8 / 7 / 6
   if (!$('html').hasClass('lt-ie9')) {
@@ -12322,9 +12329,26 @@ $(function() {
       }
     });
   });
+  // tooltips
+  $('[data-toggle="tooltip"]').tooltip()
+  // warnings
+  $('.warn').click(function(e) {
+    if (!confirm($(this).attr('data-content'))) {
+      e.preventDefault();
+    }
+  });
 });
 
 $(function() {
+  var $adminExamType = $('#admin-exam-type');
+  var $adminExamPassword = $('#admin-exam-password');
+  $adminExamType.change(function(e) {
+    if ($adminExamType.val() === 'password') {
+      $adminExamPassword.show();
+    } else {
+      $adminExamPassword.hide();
+    }
+  });
 });
 
 //# sourceMappingURL=bundle.js.map
