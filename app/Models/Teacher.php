@@ -2,14 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Teacher extends Model
+class Teacher extends Authenticatable
 {
     /**
-     * Indicates if the table should be timestamped(create_at and update_at).
+     * The attributes that are mass assignable.
      *
-     * @var bool
+     * @var array
      */
-    public $timestamps = false;
+    protected $fillable = ['name', 'email', 'tel', 'password'];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
 }

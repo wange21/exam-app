@@ -54,6 +54,10 @@ class AuthController extends Controller
             'password' => 'required|min:6|confirmed',
             'student' => 'required|max:16',
             'major' => 'max:32',
+        ], [
+            'name.required' => '必须填写真实姓名。',
+            'email.unique' => '该电子邮件地址已经被使用',
+            'password.confirmed' => '两次输入的密码不一样。',
         ]);
     }
 

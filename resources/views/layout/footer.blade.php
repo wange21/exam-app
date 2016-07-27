@@ -1,3 +1,3 @@
 <div class="footer">
-    {{ config('config.copyright') }} &copy; @lang('misc.copyright')
+    {{ config('config.copyright') }} &copy; 版权所有
 </div>

@@ -25,5 +25,5 @@ class AnswerBlankFill extends Model
      *
      * @var array
      */
-    protected $fillable = ['student', 'question', 'order'];
+    protected $fillable = ['id', 'order'];
 }

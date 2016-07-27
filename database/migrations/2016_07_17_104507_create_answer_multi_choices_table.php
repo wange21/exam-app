@@ -13,18 +13,10 @@ class CreateAnswerMultiChoicesTable extends Migration
     public function up()
     {
         Schema::create('answer_multi_choice', function (Blueprint $table) {
-            // global answer id
-            $table->increments('id');
-            // student id(each student in any exam have an unique id)
-            $table->integer('student')->unsigned();
-            // question id
-            $table->integer('question')->unsigned();
+            // answer id
+            $table->integer('id')->unsigned()->index();
             // answer
             $table->integer('answer')->unsigned();
-            // score
-            $table->tinyInteger('score')->unsigned();
-            // create an index with student and question
-            $table->index(['student', 'question']);
         });
     }
 

@@ -202,6 +202,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'ExamAuth' => App\Http\Middleware\ExamAuthenticate::class,
+        'AdminAuth' => App\Http\Middleware\AdminAuthenticate::class,
     ],
 
 ];
